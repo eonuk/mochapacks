@@ -1,0 +1,48 @@
+{
+  "name": "mochapacks",
+  "version": "0.0.1",
+  "description": "A new reporter focusing on suites & testpacks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write --tab-width 4 \"src/**/*.js\"",
+    "lint": "./node_modules/.bin/eslint src",
+    "lint!": "npm run format && npm run lint",
+    "prepublish": "node_modules/@babel/cli/bin/babel.js src --out-dir lib",
+    "precommit": "lint-staged",
+    "commit": "./node_modules/.bin/git-cz"
+  },
+  "lint-staged": {
+    "src/*.js": [
+      "npm run lint!",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eonuk/npm-template.git"
+  },
+  "author": "Ian Webb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eonuk/npm-template/issues"
+  },
+  "homepage": "https://github.com/eonuk/npm-template#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.4",
+    "commitizen": "^3.0.7",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^5.14.1",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.4",
+    "prettier": "^1.16.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
