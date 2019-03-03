@@ -1,0 +1,4 @@
+--stack-trace
+--require @babel/register
+--timeout 300000
+--reporter ./lib/mochapacks.js
