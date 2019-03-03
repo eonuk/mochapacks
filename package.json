@@ -6,7 +6,8 @@
   "scripts": {
     "clean": "rimraf lib",
     "build": "npx babel src --out-dir lib",
-    "test": "npm run clean && npm run build && npx mocha",
+    "dev": "npx babel src --watch --out-dir lib",
+    "test": "npx mocha",
     "format": "prettier --write --tab-width 4 \"src/**/*.js\" \"test/**/*.js\"",
     "lint": "npx eslint src",
     "lint!": "npm run format && npm run lint",
