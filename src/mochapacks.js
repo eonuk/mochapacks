@@ -1,7 +1,7 @@
-import DataStore from "./dataStore";
-import Debug from "./utils/debug";
+import DataStore from './dataStore';
+import Debug from './utils/debug';
 
-const Mocha = require("mocha");
+const Mocha = require('mocha');
 const {
     EVENT_RUN_BEGIN,
     EVENT_RUN_END,
@@ -14,7 +14,7 @@ const {
     EVENT_SUITE_BEGIN,
     EVENT_SUITE_END,
     EVENT_HOOK_BEGIN,
-    EVENT_HOOK_END
+    EVENT_HOOK_END,
 } = Mocha.Runner.constants;
 
 /**
@@ -80,7 +80,7 @@ class MochaPacksReporter {
      * @private
      */
     _eventSuiteBegin(suite) {
-        this._debug.log("start", suite, "suite");
+        this._debug.log('start', suite, 'suite');
         this._debug.incrementLevel();
         suite.mpStartDate = new Date();
     }

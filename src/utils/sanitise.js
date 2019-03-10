@@ -6,8 +6,6 @@ export default class Sanitise {
      * @return a cleaned version of the suite object
      */
     static cleanSuite(suite) {
-        //let duration = 0;
-
         /*const passingTests = [];
         const failingTests = [];
         const pendingTests = [];
@@ -24,7 +22,7 @@ export default class Sanitise {
         );*/
 
         // extract hooks id numbers
-        const beforeHookIds = suite._beforeAll
+        /*const beforeHookIds = suite._beforeAll
             .concat(suite._beforeEach)
             .map(hook => hook.mpId);
 
@@ -36,8 +34,21 @@ export default class Sanitise {
         const testIds = suite.tests.map(test => test.mpId);
 
         // extract suite id numbers
-        const suiteIds = suite.suites.map(suit => suit.mpId);
+        const suiteIds = suite.suites.map(suit => suit.mpId);*/
 
+        // store hooks, tests and suites in one array, sorted in creation order
+        const childrenIds = []
+            .concat(suite._beforeAll)
+            .concat(suite._beforeEach)
+            .concat(suite._afterAll)
+            .concat(suite._afterEach)
+            .concat(suite.tests)
+            .concat(suite.suites)
+            .map(item => item.mpId)
+            .sort((a, b) => a > b);
+
+        //console.log(beforeHookIds, afterHookIds, testIds, suiteIds);
+        console.log(childrenIds);
         /*
         const tests = _.map(suite.tests, test => {
             const cleanedTest = cleanTest(test, config);
@@ -54,14 +65,18 @@ export default class Sanitise {
         totalTestsRegistered.total += tests.length;*/
 
         const obj = {
+            mpType: 'suite',
             //uuid: uuid.v4(),
             title: suite.title, //stripAnsi(suite.title),
             //fullFile: suite.file || "",
-            file: suite.file ? suite.file.replace(process.cwd(), "") : "",
-            beforeHooks: beforeHookIds,
+            file: suite.file ? suite.file.replace(process.cwd(), '') : '',
+
+            /*beforeHooks: beforeHookIds,
             afterHooks: afterHookIds,
             tests: testIds,
-            suites: suiteIds,
+            suites: suiteIds,*/
+            children: childrenIds,
+
             //passes: passingTests,
             //failures: failingTests,
             //pending: pendingTests,
@@ -69,7 +84,7 @@ export default class Sanitise {
             duration: suite.duration,
             root: suite.root,
             //rootEmpty: suite.root && tests.length === 0,
-            _timeout: suite._timeout
+            _timeout: suite._timeout,
         };
 
         /*const isEmptySuite =
@@ -89,7 +104,10 @@ export default class Sanitise {
      * @return a cleaned version of the hook object
      */
     static cleanHook(hook) {
-        return Sanitise.cleanTest(hook);
+        const obj = Sanitise.cleanTest(hook);
+        obj.mpType = 'hook';
+        delete obj.mpState;
+        return obj;
     }
 
     /**
@@ -108,24 +126,26 @@ export default class Sanitise {
         // }
 
         const obj = {
+            mpType: 'test',
+            mpState: test.pending ? 'skipped' : test.state,
             title: test.title, //stripAnsi(test.title),
             fullTitle: test.fullTitle, //_.isFunction(test.fullTitle)
             //? stripAnsi(test.fullTitle())
             //: /* istanbul ignore next */ stripAnsi(test.title),
             timedOut: test.timedOut,
             duration: test.duration || 0,
-            state: test.state,
+            //state: test.state,
             speed: test.speed,
-            pass: test.state === "passed",
-            fail: test.state === "failed",
-            pending: test.pending,
+            //pass: test.state === 'passed',
+            //fail: test.state === 'failed',
+            //pending: test.pending,
             //context: stringify(test.context, null, 2),
             //code: code, //code && cleanCode(code),
             err: test.err, //(test.err && normalizeErr(test.err, config)) || {},
-            isRoot: test.parent && test.parent.root,
+            //isRoot: test.parent && test.parent.root,
             //uuid: test.uuid || /* istanbul ignore next: default */ uuid.v4(),
-            parentUUID: test.parent && test.parent.uuid,
-            isHook: test.type === "hook"
+            //parentUUID: test.parent && test.parent.uuid,
+            //isHook: test.type === 'hook',
         };
 
         return obj;

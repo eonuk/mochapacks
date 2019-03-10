@@ -3,3 +3,4 @@
 --require @babel/polyfill
 --timeout 300000
 --reporter ./lib/mochapacks.js
+# --reporter mochawesome

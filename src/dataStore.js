@@ -1,5 +1,5 @@
-import Sanitise from "./utils/sanitise";
-import "./utils/debug";
+import Sanitise from './utils/sanitise';
+import './utils/debug';
 
 /**
  * @class DataStore
@@ -25,7 +25,7 @@ export default class DataStore {
     storeSuite(suite, debug) {
         const s = Sanitise.cleanSuite(suite);
         suite.mpId = this._addItem(s);
-        debug.log("store", s, "suite");
+        debug.log('store', s, 'suite');
     }
 
     /**
@@ -34,9 +34,12 @@ export default class DataStore {
      * @param {Debug} debug
      */
     storeHook(hook, debug) {
-        const h = Sanitise.cleanHook(hook);
-        hook.mpId = this._addItem(h);
-        debug.log("store", h, "hook");
+        // only add 'each' hooks for the first time used
+        if (!hook.mpId) {
+            const h = Sanitise.cleanHook(hook);
+            hook.mpId = this._addItem(h);
+            debug.log('store', h, 'hook');
+        }
     }
 
     /**
@@ -47,13 +50,16 @@ export default class DataStore {
     storeTest(test, debug) {
         const t = Sanitise.cleanTest(test);
         test.mpId = this._addItem(t);
-        debug.log("store", t, "test");
+        debug.log('store', t, 'test');
     }
+
+    // -------------------------------------------------
+    // PRIVATE
 
     /**
      * @member _addItem Add an item to the items array
      * @private
-     * @param {Mocha.Suite|Mocha.Test|Mocha.Hook} item
+     * @param {Object} item A sanitized version of the Mocha obj
      * @return The index number of item in the items array
      */
     _addItem(item) {

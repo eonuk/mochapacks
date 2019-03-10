@@ -22,13 +22,13 @@ export default class Debug {
      */
     log(operation, obj, type) {
         switch (operation) {
-            case "start":
+            case 'start':
                 console.log(`${this._indent}> start ${type}: ${obj.title}`);
                 break;
-            case "end":
+            case 'end':
                 console.log(`${this._indent}< end ${type}: ${obj.title}`);
                 break;
-            case "store":
+            case 'store':
                 console.log(
                     `${this._indent}+ #${obj.id} store ${type}: ${obj.title} (${
                         obj.duration
@@ -42,6 +42,6 @@ export default class Debug {
     // PRIVATE
 
     get _indent() {
-        return "  ".repeat(this._level);
+        return '  '.repeat(this._level);
     }
 }
