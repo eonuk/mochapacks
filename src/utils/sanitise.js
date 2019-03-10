@@ -61,7 +61,6 @@ export default class Sanitise {
             if (cleanedTest.skipped) skippedTests.push(cleanedTest.uuid);
             return cleanedTest;
         });
- 
         totalTestsRegistered.total += tests.length;*/
 
         const obj = {
@@ -118,7 +117,6 @@ export default class Sanitise {
      */
     static cleanTest(test) {
         //let code = test.body;
-
         /* istanbul ignore next */
         // if (code === undefined) {
         //     /* istanbul ignore next: test.fn exists prior to mocha 2.4.0 */

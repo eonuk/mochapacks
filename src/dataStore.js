@@ -24,6 +24,7 @@ export default class DataStore {
      */
     storeSuite(suite, debug) {
         const s = Sanitise.cleanSuite(suite);
+        s.mpStats = this._collateSuiteStats(s);
         suite.mpId = this._addItem(s);
         debug.log('store', s, 'suite');
     }
@@ -67,4 +68,39 @@ export default class DataStore {
         this.items.push(item);
         return item.id;
     }
+
+    /**
+     * @member _collateSuiteStats Collate a running total of stats by looking at the suite's children
+     * @private
+     * @param {Object} suite A sanitized version of the Mocha Suite
+     * @return The running total of stats for this Suite
+     */
+    _collateSuiteStats(suite) {
+        const stats = {
+            total: 0,
+            passed: 0,
+            failed: 0,
+            skipped: 0,
+        };
+        suite.children.forEach(idx => {
+            const item = this.items[idx];
+            // child suites
+            if (item.mpStats) {
+                stats.total += item.mpStats.total;
+                stats.passed += item.mpStats.passed;
+                stats.failed += item.mpStats.failed;
+                stats.skipped += item.mpStats.skipped;
+            }
+            // child tests
+            if (item.mpState) {
+                stats.total++;
+                if (item.mpState === 'passed') stats.passed++;
+                if (item.mpState === 'failed') stats.failed++;
+                if (item.mpState === 'skipped') stats.skipped++;
+            }
+        });
+        return stats;
+    }
+
+    // end-class
 }

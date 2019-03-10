@@ -21,6 +21,7 @@ export default class Debug {
      * @param {string} type the type of the data object
      */
     log(operation, obj, type) {
+        let msg;
         switch (operation) {
             case 'start':
                 console.log(`${this._indent}> start ${type}: ${obj.title}`);
@@ -29,11 +30,13 @@ export default class Debug {
                 console.log(`${this._indent}< end ${type}: ${obj.title}`);
                 break;
             case 'store':
-                console.log(
-                    `${this._indent}+ #${obj.id} store ${type}: ${obj.title} (${
-                        obj.duration
-                    }ms)`
-                );
+                msg = `${this._indent}+ #${obj.id} store ${type}:`;
+                msg += ` ${obj.title}`;
+                msg += ` (${obj.duration}ms).`;
+                if (obj.mpStats) {
+                    msg += ` stats: ${JSON.stringify(obj.mpStats)}`;
+                }
+                console.log(msg);
                 break;
         }
     }
