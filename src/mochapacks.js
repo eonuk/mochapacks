@@ -1,5 +1,4 @@
-// my-reporter.js
-"use strict";
+import DataStore from "./dataStore";
 
 const Mocha = require("mocha");
 const {
@@ -43,6 +42,8 @@ class MochaPacksReporter {
         runner.on(EVENT_TEST_FAIL, this._eventTestFail.bind(this));
         runner.on(EVENT_TEST_PENDING, this._eventTestPending.bind(this));
         runner.on(EVENT_TEST_RETRY, this._eventTestRetry.bind(this));
+
+        this._dataStore = new DataStore();
     }
 
     indent() {
@@ -79,7 +80,8 @@ class MochaPacksReporter {
      * @private
      */
     _eventSuiteBegin(suite) {
-        console.log(`${this.indent()}begin_suite: ${suite.fullTitle()}`);
+        //console.log(`${this.indent()}begin_suite: ${suite.fullTitle()}`);
+        console.log(`${this.indent()}> start suite: ${suite.title}`);
         this.increaseIndent();
     }
 
@@ -89,8 +91,9 @@ class MochaPacksReporter {
      * @private
      */
     _eventSuiteEnd(suite) {
-        console.log(`${this.indent()}end_suite: ${suite.fullTitle()}`);
+        //console.log(`${this.indent()}end_suite: ${suite.fullTitle()}`);
         this.decreaseIndent();
+        this._dataStore.storeSuite(suite, this.indent());
     }
 
     /**
@@ -99,7 +102,8 @@ class MochaPacksReporter {
      * @private
      */
     _eventHookBegin(hook) {
-        console.log(`${this.indent()}begin_hook: ${hook.fullTitle()}`);
+        hook;
+        //console.log(`${this.indent()}begin_hook: ${hook.fullTitle()}`);
     }
 
     /**
@@ -108,7 +112,8 @@ class MochaPacksReporter {
      * @private
      */
     _eventHookEnd(hook) {
-        console.log(`${this.indent()}end_hook: ${hook.fullTitle()}`);
+        //console.log(`${this.indent()}end_hook: ${hook.fullTitle()}`);
+        this._dataStore.storeHook(hook, this.indent());
     }
 
     /**
@@ -117,9 +122,10 @@ class MochaPacksReporter {
      * @private
      */
     _eventTestBegin(test) {
+        test;
         // Test#fullTitle() returns the suite name(s)
         // prepended to the test title
-        console.log(`${this.indent()}begin_test: ${test.fullTitle()}`);
+        //console.log(`${this.indent()}begin_test: ${test.fullTitle()}`);
     }
 
     /**
@@ -128,7 +134,8 @@ class MochaPacksReporter {
      * @private
      */
     _eventTestEnd(test) {
-        console.log(`${this.indent()}end_test: ${test.fullTitle()}`);
+        //console.log(`${this.indent()}end_test: ${test.fullTitle()}`);
+        this._dataStore.storeTest(test, this.indent());
     }
 
     /**
@@ -137,7 +144,8 @@ class MochaPacksReporter {
      * @private
      */
     _eventTestPass(test) {
-        console.log(`${this.indent()}pass: ${test.fullTitle()}`);
+        test;
+        //console.log(`${this.indent()}pass: ${test.fullTitle()}`);
     }
 
     /**
@@ -147,9 +155,9 @@ class MochaPacksReporter {
      * @private
      */
     _eventTestFail(test, err) {
-        console.log(
-            `${this.indent()}fail: ${test.fullTitle()} - error: ${err.message}`
-        );
+        test;
+        err;
+        //console.log(`${this.indent()}fail: ${test.fullTitle()} - error: ${err.message}`);
     }
 
     /**
@@ -158,7 +166,8 @@ class MochaPacksReporter {
      * @private
      */
     _eventTestPending(test) {
-        console.log(`${this.indent()}pending: ${test.fullTitle()}`);
+        test;
+        //console.log(`${this.indent()}pending: ${test.fullTitle()}`);
     }
 
     /**
@@ -168,9 +177,11 @@ class MochaPacksReporter {
      * @private
      */
     _eventTestRetry(test, err) {
-        console.log(
+        test;
+        err;
+        /*console.log(
             `${this.indent()}retry: ${test.fullTitle()} - error: ${err.message}`
-        );
+        );*/
     }
 }
 

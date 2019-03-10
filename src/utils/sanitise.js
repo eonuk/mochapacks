@@ -1,0 +1,132 @@
+export default class Sanitise {
+    /**
+     * @method cleanSuite
+     * @static
+     * @param {Mocha.Suite} suite A suite object
+     * @return a cleaned version of the suite object
+     */
+    static cleanSuite(suite) {
+        /*let duration = 0;
+        const passingTests = [];
+        const failingTests = [];
+        const pendingTests = [];
+        const skippedTests = [];*/
+
+        /*const beforeHooks = _.map(
+           [].concat(suite._beforeAll, suite._beforeEach),
+           test => cleanTest(test, config)
+        );
+
+        const afterHooks = _.map(
+           [].concat(suite._afterAll, suite._afterEach),
+           test => cleanTest(test, config)
+        );*/
+
+        // extract hooks' and tests' id numbers
+        const beforeHookIds = suite._beforeAll
+            .concat(suite._beforeEach)
+            .map(hook => hook.id);
+
+        const afterHookIds = suite._afterAll
+            .concat(suite._afterEach)
+            .map(hook => hook.id);
+
+        const testIds = suite.tests.map(test => test.id);
+
+        console.log(beforeHookIds, afterHookIds, testIds);
+
+        /*
+        const tests = _.map(suite.tests, test => {
+            const cleanedTest = cleanTest(test, config);
+            duration += test.duration;
+            if (cleanedTest.state === "passed")
+                passingTests.push(cleanedTest.uuid);
+            if (cleanedTest.state === "failed")
+                failingTests.push(cleanedTest.uuid);
+            if (cleanedTest.pending) pendingTests.push(cleanedTest.uuid);
+            if (cleanedTest.skipped) skippedTests.push(cleanedTest.uuid);
+            return cleanedTest;
+        });
+ 
+        totalTestsRegistered.total += tests.length;*/
+
+        const obj = {
+            //uuid: uuid.v4(),
+            title: suite.title, //stripAnsi(suite.title),
+            fullFile: suite.file || "",
+            file: suite.file ? suite.file.replace(process.cwd(), "") : "",
+            beforeHooks: beforeHookIds,
+            afterHooks: afterHookIds,
+            tests: testIds,
+            //suites: suite.suites,
+            //passes: passingTests,
+            //failures: failingTests,
+            //pending: pendingTests,
+            //skipped: skippedTests,
+            //duration,
+            root: suite.root,
+            //rootEmpty: suite.root && tests.length === 0,
+            _timeout: suite._timeout
+        };
+
+        /*const isEmptySuite =
+           _.isEmpty(cleaned.suites) &&
+           _.isEmpty(cleaned.tests) &&
+           _.isEmpty(cleaned.beforeHooks) &&
+           _.isEmpty(cleaned.afterHooks);
+
+       return !isEmptySuite && cleaned;*/
+        return obj;
+    }
+
+    /**
+     * @method cleanHook
+     * @static
+     * @param {Mocha.Hook} hook A hook object
+     * @return a cleaned version of the hook object
+     */
+    static cleanHook(hook) {
+        return Sanitise.cleanTest(hook);
+    }
+
+    /**
+     * @method cleanTest
+     * @static
+     * @param {Mocha.Test} test A test object
+     * @return {Object} a cleaned version of the test object
+     */
+    static cleanTest(test) {
+        let code = test.body;
+
+        /* istanbul ignore next */
+        if (code === undefined) {
+            /* istanbul ignore next: test.fn exists prior to mocha 2.4.0 */
+            code = test.fn ? test.fn.toString() : "";
+        }
+
+        const obj = {
+            title: test.title, //stripAnsi(test.title),
+            fullTitle: test.fullTitle, //_.isFunction(test.fullTitle)
+            //? stripAnsi(test.fullTitle())
+            //: /* istanbul ignore next */ stripAnsi(test.title),
+            timedOut: test.timedOut,
+            duration: test.duration || 0,
+            state: test.state,
+            speed: test.speed,
+            pass: test.state === "passed",
+            fail: test.state === "failed",
+            pending: test.pending,
+            //context: stringify(test.context, null, 2),
+            code: code, //code && cleanCode(code),
+            err: test.err, //(test.err && normalizeErr(test.err, config)) || {},
+            isRoot: test.parent && test.parent.root,
+            //uuid: test.uuid || /* istanbul ignore next: default */ uuid.v4(),
+            parentUUID: test.parent && test.parent.uuid,
+            isHook: test.type === "hook"
+        };
+
+        return obj;
+    }
+
+    // end-class
+}
