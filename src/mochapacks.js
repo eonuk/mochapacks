@@ -1,4 +1,5 @@
 import DataStore from "./dataStore";
+import Debug from "./utils/debug";
 
 const Mocha = require("mocha");
 const {
@@ -26,7 +27,8 @@ class MochaPacksReporter {
      * @param {Runner} runner
      */
     constructor(runner) {
-        this._indents = 0;
+        this._debug = new Debug();
+        //this._indents = 0;
         //const stats = runner.stats;
 
         // event listeners
@@ -46,7 +48,7 @@ class MochaPacksReporter {
         this._dataStore = new DataStore();
     }
 
-    indent() {
+    /*indent() {
         return Array(this._indents).join("  ");
     }
 
@@ -56,22 +58,20 @@ class MochaPacksReporter {
 
     decreaseIndent() {
         this._indents--;
-    }
+    }*/
 
     /**
      * @method eventRunBegin
      * @private
      */
-    _eventRunBegin() {
-        console.log(`${this.indent()}begin_run`);
-    }
+    _eventRunBegin() {}
 
     /**
      * @method eventRunEnd
      * @private
      */
     _eventRunEnd() {
-        console.log(`${this.indent()}end_run`);
+        //console.log(`${this.indent()}end_run`);
     }
 
     /**
@@ -80,9 +80,9 @@ class MochaPacksReporter {
      * @private
      */
     _eventSuiteBegin(suite) {
-        //console.log(`${this.indent()}begin_suite: ${suite.fullTitle()}`);
-        console.log(`${this.indent()}> start suite: ${suite.title}`);
-        this.increaseIndent();
+        this._debug.log("start", suite, "suite");
+        this._debug.incrementLevel();
+        suite.mpStartDate = new Date();
     }
 
     /**
@@ -91,9 +91,10 @@ class MochaPacksReporter {
      * @private
      */
     _eventSuiteEnd(suite) {
-        //console.log(`${this.indent()}end_suite: ${suite.fullTitle()}`);
-        this.decreaseIndent();
-        this._dataStore.storeSuite(suite, this.indent());
+        this._debug.decrementLevel();
+        //this._debug.log("end", suite, "suite");
+        suite.duration = new Date() - suite.mpStartDate;
+        this._dataStore.storeSuite(suite, this._debug);
     }
 
     /**
@@ -103,7 +104,7 @@ class MochaPacksReporter {
      */
     _eventHookBegin(hook) {
         hook;
-        //console.log(`${this.indent()}begin_hook: ${hook.fullTitle()}`);
+        //this._debug.log("start", hook, "hook");
     }
 
     /**
@@ -112,8 +113,8 @@ class MochaPacksReporter {
      * @private
      */
     _eventHookEnd(hook) {
-        //console.log(`${this.indent()}end_hook: ${hook.fullTitle()}`);
-        this._dataStore.storeHook(hook, this.indent());
+        //this._debug.log("end", hook, "hook");
+        this._dataStore.storeHook(hook, this._debug);
     }
 
     /**
@@ -125,7 +126,7 @@ class MochaPacksReporter {
         test;
         // Test#fullTitle() returns the suite name(s)
         // prepended to the test title
-        //console.log(`${this.indent()}begin_test: ${test.fullTitle()}`);
+        //this._debug.log("start", test, "test");
     }
 
     /**
@@ -134,8 +135,8 @@ class MochaPacksReporter {
      * @private
      */
     _eventTestEnd(test) {
-        //console.log(`${this.indent()}end_test: ${test.fullTitle()}`);
-        this._dataStore.storeTest(test, this.indent());
+        //this._debug.log("start", test, "test");
+        this._dataStore.storeTest(test, this._debug);
     }
 
     /**

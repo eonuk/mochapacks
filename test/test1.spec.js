@@ -13,8 +13,8 @@ it("should do a step at the root", function() {
 describe("test1", function() {
     this.retries(2);
 
-    before(async function() {
-        await sleep(100);
+    beforeEach(async function() {
+        await sleep(1000);
     });
 
     after(function() {

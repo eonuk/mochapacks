@@ -1,4 +1,5 @@
 import Sanitise from "./utils/sanitise";
+import "./utils/debug";
 
 /**
  * @class DataStore
@@ -19,41 +20,45 @@ export default class DataStore {
     /**
      * @member storeSuite
      * @param {Mocha.Suite} suite A Mocha Suite object
+     * @param {Debug} debug
      */
-    storeSuite(suite, indent) {
+    storeSuite(suite, debug) {
         const s = Sanitise.cleanSuite(suite);
-        suite.id = this._addItem(s);
-        console.log(`${indent}- store suite: ${suite.title} -- #${suite.id}`);
+        suite.mpId = this._addItem(s);
+        debug.log("store", s, "suite");
     }
 
     /**
      * @member storeHook
      * @param {Mocha.Hook} hook A Mocha Hook object
+     * @param {Debug} debug
      */
-    storeHook(hook, indent) {
+    storeHook(hook, debug) {
         const h = Sanitise.cleanHook(hook);
-        hook.id = this._addItem(h);
-        console.log(`${indent}- store hook: ${hook.title} -- #${hook.id}`);
+        hook.mpId = this._addItem(h);
+        debug.log("store", h, "hook");
     }
 
     /**
      * @member storeTest
      * @param {Mocha.Test} test A Mocha Test object
+     * @param {Debug} debug
      */
-    storeTest(test, indent) {
+    storeTest(test, debug) {
         const t = Sanitise.cleanTest(test);
-        test.id = this._addItem(t);
-        console.log(`${indent}- store test: ${test.title} -- #${test.id}`);
+        test.mpId = this._addItem(t);
+        debug.log("store", t, "test");
     }
 
     /**
-     * @member _addItem
+     * @member _addItem Add an item to the items array
      * @private
-     * @param {Mocha.Test|Mocha.Suite} item
-     * @return index number in items array
+     * @param {Mocha.Suite|Mocha.Test|Mocha.Hook} item
+     * @return The index number of item in the items array
      */
     _addItem(item) {
+        item.id = this.items.length;
         this.items.push(item);
-        return this.items.length - 1;
+        return item.id;
     }
 }

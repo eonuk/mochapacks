@@ -6,7 +6,7 @@ export default class Sanitise {
      * @return a cleaned version of the suite object
      */
     static cleanSuite(suite) {
-        let duration = 0;
+        //let duration = 0;
 
         /*const passingTests = [];
         const failingTests = [];
@@ -26,33 +26,17 @@ export default class Sanitise {
         // extract hooks id numbers
         const beforeHookIds = suite._beforeAll
             .concat(suite._beforeEach)
-            .map(hook => {
-                //console.log("b dur", hook.duration);
-                duration += hook.duration || 0;
-                return hook.id;
-            });
+            .map(hook => hook.mpId);
 
         const afterHookIds = suite._afterAll
             .concat(suite._afterEach)
-            .map(hook => {
-                //console.log("h dur", hook.duration);
-                duration += hook.duration || 0;
-                return hook.id;
-            });
+            .map(hook => hook.mpId);
 
         // extract test id numbers
-        const testIds = suite.tests.map(test => {
-            //console.log("t dur", test.duration);
-            duration += test.duration || 0;
-            return test.id;
-        });
-        
+        const testIds = suite.tests.map(test => test.mpId);
+
         // extract suite id numbers
-        const suiteIds = suite.suites.map(suit => {
-            //console.log("s dur", suit.duration);
-            duration += suit.duration || 0;
-            return suit.id;
-        });
+        const suiteIds = suite.suites.map(suit => suit.mpId);
 
         /*
         const tests = _.map(suite.tests, test => {
@@ -72,7 +56,7 @@ export default class Sanitise {
         const obj = {
             //uuid: uuid.v4(),
             title: suite.title, //stripAnsi(suite.title),
-            fullFile: suite.file || "",
+            //fullFile: suite.file || "",
             file: suite.file ? suite.file.replace(process.cwd(), "") : "",
             beforeHooks: beforeHookIds,
             afterHooks: afterHookIds,
@@ -82,7 +66,7 @@ export default class Sanitise {
             //failures: failingTests,
             //pending: pendingTests,
             //skipped: skippedTests,
-            duration: duration,
+            duration: suite.duration,
             root: suite.root,
             //rootEmpty: suite.root && tests.length === 0,
             _timeout: suite._timeout
@@ -94,9 +78,6 @@ export default class Sanitise {
            _.isEmpty(cleaned.beforeHooks) &&
            _.isEmpty(cleaned.afterHooks);
         return !isEmptySuite && cleaned;*/
-
-        console.log("duration: ",duration);
-        suite.duration = duration;
 
         return obj;
     }
@@ -118,13 +99,13 @@ export default class Sanitise {
      * @return {Object} a cleaned version of the test object
      */
     static cleanTest(test) {
-        let code = test.body;
+        //let code = test.body;
 
         /* istanbul ignore next */
-        if (code === undefined) {
-            /* istanbul ignore next: test.fn exists prior to mocha 2.4.0 */
-            code = test.fn ? test.fn.toString() : "";
-        }
+        // if (code === undefined) {
+        //     /* istanbul ignore next: test.fn exists prior to mocha 2.4.0 */
+        //     code = test.fn ? test.fn.toString() : "";
+        // }
 
         const obj = {
             title: test.title, //stripAnsi(test.title),
@@ -139,7 +120,7 @@ export default class Sanitise {
             fail: test.state === "failed",
             pending: test.pending,
             //context: stringify(test.context, null, 2),
-            code: code, //code && cleanCode(code),
+            //code: code, //code && cleanCode(code),
             err: test.err, //(test.err && normalizeErr(test.err, config)) || {},
             isRoot: test.parent && test.parent.root,
             //uuid: test.uuid || /* istanbul ignore next: default */ uuid.v4(),
