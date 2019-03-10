@@ -6,8 +6,9 @@ export default class Sanitise {
      * @return a cleaned version of the suite object
      */
     static cleanSuite(suite) {
-        /*let duration = 0;
-        const passingTests = [];
+        let duration = 0;
+
+        /*const passingTests = [];
         const failingTests = [];
         const pendingTests = [];
         const skippedTests = [];*/
@@ -22,18 +23,36 @@ export default class Sanitise {
            test => cleanTest(test, config)
         );*/
 
-        // extract hooks' and tests' id numbers
+        // extract hooks id numbers
         const beforeHookIds = suite._beforeAll
             .concat(suite._beforeEach)
-            .map(hook => hook.id);
+            .map(hook => {
+                //console.log("b dur", hook.duration);
+                duration += hook.duration || 0;
+                return hook.id;
+            });
 
         const afterHookIds = suite._afterAll
             .concat(suite._afterEach)
-            .map(hook => hook.id);
+            .map(hook => {
+                //console.log("h dur", hook.duration);
+                duration += hook.duration || 0;
+                return hook.id;
+            });
 
-        const testIds = suite.tests.map(test => test.id);
-
-        console.log(beforeHookIds, afterHookIds, testIds);
+        // extract test id numbers
+        const testIds = suite.tests.map(test => {
+            //console.log("t dur", test.duration);
+            duration += test.duration || 0;
+            return test.id;
+        });
+        
+        // extract suite id numbers
+        const suiteIds = suite.suites.map(suit => {
+            //console.log("s dur", suit.duration);
+            duration += suit.duration || 0;
+            return suit.id;
+        });
 
         /*
         const tests = _.map(suite.tests, test => {
@@ -58,12 +77,12 @@ export default class Sanitise {
             beforeHooks: beforeHookIds,
             afterHooks: afterHookIds,
             tests: testIds,
-            //suites: suite.suites,
+            suites: suiteIds,
             //passes: passingTests,
             //failures: failingTests,
             //pending: pendingTests,
             //skipped: skippedTests,
-            //duration,
+            duration: duration,
             root: suite.root,
             //rootEmpty: suite.root && tests.length === 0,
             _timeout: suite._timeout
@@ -74,8 +93,11 @@ export default class Sanitise {
            _.isEmpty(cleaned.tests) &&
            _.isEmpty(cleaned.beforeHooks) &&
            _.isEmpty(cleaned.afterHooks);
+        return !isEmptySuite && cleaned;*/
 
-       return !isEmptySuite && cleaned;*/
+        console.log("duration: ",duration);
+        suite.duration = duration;
+
         return obj;
     }
 

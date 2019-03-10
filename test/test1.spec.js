@@ -1,7 +1,9 @@
 const expect = require("chai").expect;
 
-before(function() {
-    let x = 1;
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+before(async function() {
+    await sleep(500);
 });
 
 it("should do a step at the root", function() {
@@ -11,15 +13,16 @@ it("should do a step at the root", function() {
 describe("test1", function() {
     this.retries(2);
 
-    before(function() {
-        let a = 1;
+    before(async function() {
+        await sleep(100);
     });
 
     after(function() {
         let b = 1;
     });
 
-    it("should test that 1 equals 1", function() {
+    it("should test that 1 equals 1", async function() {
+        await sleep(150);
         expect(1).to.equal(1);
     });
     it("should test that 2 equals 2", function() {
@@ -32,7 +35,9 @@ describe("test1", function() {
 
     describe("inner describe1", function() {
         it("should do inner1.1");
-        it("should do inner1.2", function() {});
+        it("should do inner1.2", async function() {
+            await sleep(120);
+        });
     });
     describe("inner describe2", function() {
         it("should do inner2.1", function() {});
