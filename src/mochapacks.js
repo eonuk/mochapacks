@@ -1,3 +1,5 @@
+//const Base = require('mocha/lib/reporters/base');
+const Spec = require('mocha/lib/reporters/spec');
 import DataStore from './dataStore';
 import Debug from './utils/debug';
 
@@ -30,6 +32,12 @@ class MochaPacksReporter {
         this._debug = new Debug();
         //this._indents = 0;
         //const stats = runner.stats;
+
+        // call the Base mocha reporter
+        //Base.call(this, runner);
+
+        // show the Spec Reporter in the console
+        new Spec(runner);
 
         // event listeners
         runner.once(EVENT_RUN_BEGIN, this._eventRunBegin.bind(this));

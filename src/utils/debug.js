@@ -24,19 +24,19 @@ export default class Debug {
         let msg;
         switch (operation) {
             case 'start':
-                console.log(`${this._indent}> start ${type}: ${obj.title}`);
+                this._logMsg(`> start ${type}: ${obj.title}`);
                 break;
             case 'end':
-                console.log(`${this._indent}< end ${type}: ${obj.title}`);
+                this._logMsg(`< end ${type}: ${obj.title}`);
                 break;
             case 'store':
-                msg = `${this._indent}+ #${obj.id} store ${type}:`;
+                msg = `+ #${obj.id} store ${type}:`;
                 msg += ` ${obj.title}`;
                 msg += ` (${obj.duration}ms).`;
                 if (obj.mpStats) {
                     msg += ` stats: ${JSON.stringify(obj.mpStats)}`;
                 }
-                console.log(msg);
+                this._logMsg(msg);
                 break;
         }
     }
@@ -46,5 +46,9 @@ export default class Debug {
 
     get _indent() {
         return '  '.repeat(this._level);
+    }
+
+    _logMsg(msg) {
+        console.log(`\u001b[38;5;3m${this._indent}${msg}\u001b[0m`);
     }
 }

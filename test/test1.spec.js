@@ -10,7 +10,7 @@ it('should do a step at the root', function() {
     expect(1).to.equal(1);
 });
 
-describe('test1', function() {
+describe('*** TEST #1 ***', function() {
     this.retries(2);
 
     beforeEach(async function() {

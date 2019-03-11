@@ -48,7 +48,7 @@ export default class Sanitise {
             .sort((a, b) => a > b);
 
         //console.log(beforeHookIds, afterHookIds, testIds, suiteIds);
-        console.log(childrenIds);
+        //console.log(childrenIds);
         /*
         const tests = _.map(suite.tests, test => {
             const cleanedTest = cleanTest(test, config);

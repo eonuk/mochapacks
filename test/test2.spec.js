@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('test2', function() {
+describe('*** TEST #2 ***', function() {
     before(function() {
         let a = 1;
     });
