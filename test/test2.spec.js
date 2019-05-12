@@ -2,25 +2,38 @@ const expect = require('chai').expect;
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('*** TEST #2 ***', function() {
-    before(function() {
-        let a = 1;
+describe('Second test case @tag2 @tag3 $refcode2', function() {
+    it('information', function() {
+        // some information here
     });
 
-    before(function() {
-        let b = 1;
+    describe('scenario 1', function() {
+        it('should do another first step', async function() {
+            expect(10).to.equal(10);
+        });
+
+        it('should do another first step', function() {
+            expect(10).to.equal(11);
+        });
     });
 
-    after(function() {
-        let c = 1;
-    });
+    describe('scenario 2', function() {
+        it('should do another first step', async function() {
+            expect(10).to.equal(10);
+        });
 
-    it('should do another first step', async function() {
-        await sleep(1000);
-        expect(10).to.equal(10);
-    });
+        it('should do another first step', function() {
+            expect(10).to.equal(10);
+        });
 
-    it('should do another first step', function() {
-        expect(10).to.equal(10);
+        describe('subpart', function() {
+            it('should do another first step', async function() {
+                expect(10).to.equal(10);
+            });
+
+            it('should do another first step', function() {
+                expect(10).to.equal(10);
+            });
+        });
     });
 });

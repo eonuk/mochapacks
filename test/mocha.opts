@@ -2,5 +2,7 @@
 --require @babel/register
 --require @babel/polyfill
 --timeout 300000
---reporter ./lib/mochapacks.js
+--reporter ./src/testCaseReporter.js
+--reporter-options testCaseLevel=2
+# --reporter ./lib/mochapacks.js
 # --reporter mochawesome
