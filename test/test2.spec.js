@@ -15,7 +15,12 @@ describe('*** TEST #2 ***', function() {
         let c = 1;
     });
 
-    it('should do another step', function() {
+    it('should do another first step', async function() {
+        await sleep(1000);
+        expect(10).to.equal(10);
+    });
+
+    it('should do another first step', function() {
         expect(10).to.equal(10);
     });
 });

@@ -25,11 +25,16 @@
     "url": "git+https://github.com/eonuk/mochapacks.git"
   },
   "author": "Ian Webb",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/eonuk/mochapacks/issues"
   },
   "homepage": "https://github.com/eonuk/mochapacks#readme",
+  "engine": "node >= 4",
+  "main": "lib/mochapacks.js",
+  "files": [
+    "lib"
+  ],
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"

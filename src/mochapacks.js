@@ -1,9 +1,9 @@
 //const Base = require('mocha/lib/reporters/base');
 const Spec = require('mocha/lib/reporters/spec');
+const Mocha = require('mocha');
 import DataStore from './dataStore';
 import Debug from './utils/debug';
 
-const Mocha = require('mocha');
 const {
     EVENT_RUN_BEGIN,
     EVENT_RUN_END,
@@ -30,13 +30,12 @@ class MochaPacksReporter {
      */
     constructor(runner) {
         this._debug = new Debug();
-        //this._indents = 0;
         //const stats = runner.stats;
 
-        // call the Base mocha reporter
-        //Base.call(this, runner);
+        // data store for test results
+        this._dataStore = new DataStore();
 
-        // show the Spec Reporter in the console
+        // Spec Reporter for the console
         new Spec(runner);
 
         // event listeners
@@ -52,21 +51,7 @@ class MochaPacksReporter {
         runner.on(EVENT_TEST_FAIL, this._eventTestFail.bind(this));
         runner.on(EVENT_TEST_PENDING, this._eventTestPending.bind(this));
         runner.on(EVENT_TEST_RETRY, this._eventTestRetry.bind(this));
-
-        this._dataStore = new DataStore();
     }
-
-    /*indent() {
-        return Array(this._indents).join("  ");
-    }
-
-    increaseIndent() {
-        this._indents++;
-    }
-
-    decreaseIndent() {
-        this._indents--;
-    }*/
 
     /**
      * @method eventRunBegin
